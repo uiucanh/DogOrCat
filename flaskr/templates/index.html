@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Is it a dog or a cat?</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <style>
+        html, body {
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container shadow p-3 mb-5 bg-white rounded" align="center" style="height:100%">
+        <header>
+            <img src="{{ url_for('static', filename='header.jpg')}}" class="img-fluid">
+        </header>
+        <hr>
+        <h1>Is it a dog or a cat?</h1>
+        <br>
+        <form action="/upload" method="post" enctype="multipart/form-data" id="uploadForm">
+            <span class="btn btn-default btn-file">
+                <input type="file" name="image" accept=".jpg, .jpeg, .png" id="uploadInput" class="btn border">
+            </span>
+        </form>
+        <br>
+        <div id="result"></div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#uploadInput").change(function (e) {
+                e.preventDefault();
+                var formData = new FormData($("#uploadForm")[0]);
+
+                $.ajax({
+                    url: $("#uploadForm").attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (resp) {
+                        $("#result").html("<i>It's a <b>" + resp + "</b></i>");
+                    },
+                    error: function(resp) {
+                        $("#result").html("Not allowed extension!");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
